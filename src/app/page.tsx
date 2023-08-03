@@ -23,12 +23,20 @@ export default function Home() {
   const blogDir = "src/posts";
 
   // 2) Find all files in the blog directory
-  const files = fs.readdirSync(path.join(blogDir));
+  const folders = fs.readdirSync(path.join(blogDir));
+
+  const files = folders.map((folder) => {
+    const files = fs.readdirSync(path.join(`src/posts/${folder}`));
+    return files.find((f) => f.endsWith(".mdx")) as string;
+  });
 
   // 3) For each blog found
   const blogs = files.map((filename) => {
     // 4) Read the content of that blog
-    const fileContent = fs.readFileSync(path.join(blogDir, filename), "utf-8");
+    const fileContent = fs.readFileSync(
+      path.join(`${blogDir}/${filename.split(".")[0]}`, filename),
+      "utf-8"
+    );
 
     // 5) Extract the metadata from the blog's content
     const { data: frontMatter } = matter(fileContent);
@@ -39,17 +47,16 @@ export default function Home() {
       slug: filename.replace(".mdx", ""),
     };
   });
-  return (
-    <main className="flex flex-col mt-20">
-      <Container variant="large">
-        <div className="flex text-3xl md:text-4xl lg:text-5xl">
-          <h1 className="font-bold leading-tight tracking-normal">
-            Latest Blog Posts
-          </h1>
-        </div>
 
+  return (
+    <main className="flex flex-col mt-20" style={inter.style}>
+      <Container variant="large">
         <section className="py-10">
-          <h2 className="text-2xl font-bold">Latest Blogs</h2>
+          <div className="flex ">
+            <h1 className="font-bold leading-tight tracking-normal text-3xl md:text-4xl lg:text-5xl">
+              Latest Blog Posts
+            </h1>
+          </div>
 
           <div className="py-2">
             {blogs.map((blog) => (

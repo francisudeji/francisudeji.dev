@@ -15,6 +15,8 @@ import "src/styles/highlight.css";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { useMemo } from "react";
 import { Container } from "src/components/container";
+import Link from "next/link";
+import Image from "next/image";
 
 const options = {
   mdxOptions: {
@@ -26,7 +28,12 @@ const options = {
 };
 
 export function generateStaticParams() {
-  const files = fs.readdirSync(path.join("src/posts"));
+  const folders = fs.readdirSync(path.join("src/posts"));
+
+  const files = folders.map((folder) => {
+    const files = fs.readdirSync(path.join(`src/posts/${folder}`));
+    return files.filter((f) => f.endsWith(".mdx"))[0] as string;
+  });
 
   const paths = files.map((filename) => ({
     slug: filename.replace(".mdx", ""),
@@ -37,7 +44,7 @@ export function generateStaticParams() {
 
 function getPost({ slug }: { slug: string }) {
   const markdownFile = fs.readFileSync(
-    path.join("src/posts", slug + ".mdx"),
+    path.join(`src/posts/${slug}/`, slug + ".mdx"),
     "utf-8"
   );
 
@@ -65,19 +72,29 @@ export default async function Post({ params }: any) {
 
   // prose-pre:rounded-none prose-img:w-full sm:prose-pre:rounded-md prose-img:rounded-none sm:prose-img:rounded-md  prose-headings:px-4
   return (
-    <article className="prose prose-slate mx-auto prose-img:w-full prose-img:rounded-md mt-20">
-      <Container variant="large">
-        <time>{props.frontMatter.date}</time>
-        <h1 className="">
-          {/* {props.frontMatter.title} Lorem ipsum dolor sit amet consectetur
-          adipisicing elit. Soluta, magnam? */}
-          How to build a full-stack app with Remix, tailwindcss and Prisma
-        </h1>
-        {/* <h1>{props.frontMatter.title}</h1> */}
+    <Container variant="medium">
+      <article className="prose prose-slate mx-auto prose-img:w-full prose-img:rounded-md mt-6 max-w-full prose-base md:prose-lg prose-lead:text-red-300 prose-table:border prose-table:border-slate-200 prose-td:text-center prose-th:text-center prose-th:pt-3 even:prose-tr:bg-slate-100">
+        <Link
+          href="/blog"
+          className="mt-6 no-underline hover:underline focus:underline"
+        >
+          ← Back to blog
+        </Link>
 
+        <div className="space-y-6 mt-16">
+          <span className="text-sm font-light">{props.frontMatter.date}</span>
+          <h1>{props.frontMatter.title}</h1>
+          <Image
+            src={`/images/${props.slug}/cover.avif`}
+            alt={props.frontMatter.title}
+            width={1024}
+            height={1024}
+            quality={100}
+          />
+        </div>
         {/* @ts-expect-error Server Component*/}
         <MDXRemote source={props.content} options={options} />
-      </Container>
-    </article>
+      </article>
+    </Container>
   );
 }
