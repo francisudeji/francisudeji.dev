@@ -2,8 +2,6 @@ import { Inter } from "@next/font/google";
 
 import { Metadata } from "next";
 
-import dayjs from "dayjs";
-
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
