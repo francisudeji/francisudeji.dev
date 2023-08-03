@@ -2,6 +2,8 @@ import { Inter } from "@next/font/google";
 
 import { Metadata } from "next";
 
+import dayjs from "dayjs";
+
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
@@ -31,22 +33,30 @@ export default function Blog() {
   });
 
   // 3) For each blog found
-  const blogs = files.map((filename) => {
-    // 4) Read the content of that blog
-    const fileContent = fs.readFileSync(
-      path.join(`${blogDir}/${filename.split(".")[0]}`, filename),
-      "utf-8"
-    );
+  const blogs = files
+    .map((filename) => {
+      // 4) Read the content of that blog
+      const fileContent = fs.readFileSync(
+        path.join(`${blogDir}/${filename.split(".")[0]}`, filename),
+        "utf-8"
+      );
 
-    // 5) Extract the metadata from the blog's content
-    const { data: frontMatter } = matter(fileContent);
+      // 5) Extract the metadata from the blog's content
+      const { data: frontMatter } = matter(fileContent);
 
-    // 6) Return the metadata and page slug
-    return {
-      meta: frontMatter,
-      slug: filename.replace(".mdx", ""),
-    };
-  });
+      // 6) Return the metadata and page slug
+      return {
+        meta: frontMatter,
+        slug: filename.replace(".mdx", ""),
+      };
+    })
+    .sort((a, b) => {
+      if (new Date(a.meta.date) > new Date(b.meta.date)) {
+        return -1;
+      }
+
+      return 1;
+    });
 
   return (
     <main className="flex flex-col mt-20" style={inter.style}>

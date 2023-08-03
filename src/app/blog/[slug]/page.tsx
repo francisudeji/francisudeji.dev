@@ -8,12 +8,7 @@ import langHttp from "highlight.js/lib/languages/http";
 import langNginx from "highlight.js/lib/languages/nginx";
 import "src/styles/highlight.css";
 
-// import remarkRehype from "remark-rehype";
-// import { bundleMDX } from "mdx-bundler";
-// import { getMDXComponent } from "mdx-bundler/client";
-
 import { MDXRemote } from "next-mdx-remote/rsc";
-import { useMemo } from "react";
 import { Container } from "src/components/container";
 import Link from "next/link";
 import Image from "next/image";
@@ -57,12 +52,16 @@ function getPost({ slug }: { slug: string }) {
   };
 }
 
-export function generateMetadata({ params }: any) {
+export function generateMetadata({ params }: { params: { slug: string } }) {
   const blog = getPost(params);
 
   return {
     title: blog.frontMatter.title,
     description: blog.frontMatter.description,
+    metadataBase: new URL("https://francisudeji.dev"),
+    alternates: {
+      canonical: `/blog/${blog.slug}`,
+    },
   };
 }
 
@@ -70,10 +69,9 @@ export function generateMetadata({ params }: any) {
 export default async function Post({ params }: any) {
   const props = getPost(params);
 
-  // prose-pre:rounded-none prose-img:w-full sm:prose-pre:rounded-md prose-img:rounded-none sm:prose-img:rounded-md  prose-headings:px-4
   return (
     <Container variant="medium">
-      <article className="prose prose-slate mx-auto prose-img:w-full prose-img:rounded-md mt-6 max-w-full prose-base md:prose-lg prose-lead:text-red-300 prose-table:border prose-table:border-slate-200 prose-td:text-center prose-th:text-center prose-th:pt-3 even:prose-tr:bg-slate-100">
+      <article className="prose prose-slate mx-auto prose-img:w-full prose-img:rounded-md my-6 max-w-full prose-base md:prose-lg prose-lead:text-red-300 prose-table:border prose-table:border-slate-200 prose-td:text-center prose-th:text-center prose-th:pt-3 even:prose-tr:bg-slate-100">
         <Link
           href="/blog"
           className="mt-6 no-underline hover:underline focus:underline"
