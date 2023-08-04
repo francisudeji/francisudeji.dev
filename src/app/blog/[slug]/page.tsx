@@ -62,6 +62,21 @@ export function generateMetadata({ params }: { params: { slug: string } }) {
     alternates: {
       canonical: `/blog/${blog.slug}`,
     },
+    openGraph: {
+      title: blog.frontMatter.title,
+      description: "francisudeji.dev",
+      url: "https://francisudeji.dev",
+      siteName: "francisudeji.dev",
+      images: [
+        {
+          url: `https://francisudeji.dev/api/og?date=${blog.frontMatter.date}title=${blog.frontMatter.title}&slug=${blog.slug}`,
+          width: 1200,
+          height: 627,
+          alt: blog.frontMatter.title,
+        },
+      ],
+      type: "website",
+    },
   };
 }
 
