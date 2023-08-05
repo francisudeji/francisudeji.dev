@@ -55,6 +55,12 @@ function getPost({ slug }: { slug: string }) {
 export function generateMetadata({ params }: { params: { slug: string } }) {
   const blog = getPost(params);
 
+  const urlSearchParams = new URLSearchParams({
+    date: blog.frontMatter.date,
+    title: blog.frontMatter.title,
+    slug: blog.slug,
+  }).toString();
+
   return {
     title: blog.frontMatter.title,
     description: blog.frontMatter.description,
@@ -69,7 +75,7 @@ export function generateMetadata({ params }: { params: { slug: string } }) {
       siteName: "francisudeji.dev",
       images: [
         {
-          url: `/api/og?date=${blog.frontMatter.date}&title=${blog.frontMatter.title}&slug=${blog.slug}`,
+          url: `/api/og?${urlSearchParams}`,
           width: 1200,
           height: 627,
           alt: blog.frontMatter.title,

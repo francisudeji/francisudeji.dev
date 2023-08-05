@@ -5,6 +5,7 @@ export const runtime = "edge";
 export default async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
+    console.log(searchParams.values());
 
     // dynamic params
     const date = searchParams.get("date") || "";
