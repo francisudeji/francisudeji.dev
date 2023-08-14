@@ -1,7 +1,3 @@
-// app/blog/[slug]/page.tsx
-import fs from "fs";
-import path from "path";
-import matter from "gray-matter";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import langHttp from "highlight.js/lib/languages/http";
@@ -12,6 +8,8 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import { Container } from "src/components/container";
 import Link from "next/link";
 import Image from "next/image";
+import { Metadata } from "next";
+import { getBlogPost, getBlogPostFiles } from "src/utils/blog";
 
 const options = {
   mdxOptions: {
@@ -23,12 +21,7 @@ const options = {
 };
 
 export function generateStaticParams() {
-  const folders = fs.readdirSync(path.join("src/posts"));
-
-  const files = folders.map((folder) => {
-    const files = fs.readdirSync(path.join(`src/posts/${folder}`));
-    return files.filter((f) => f.endsWith(".mdx"))[0] as string;
-  });
+  const files = getBlogPostFiles();
 
   const paths = files.map((filename) => ({
     slug: filename.replace(".mdx", ""),
@@ -37,39 +30,28 @@ export function generateStaticParams() {
   return paths;
 }
 
-function getPost({ slug }: { slug: string }) {
-  const markdownFile = fs.readFileSync(
-    path.join(`src/posts/${slug}/`, slug + ".mdx"),
-    "utf-8"
-  );
-
-  const { data: frontMatter, content } = matter(markdownFile);
-
-  return {
-    frontMatter,
-    slug,
-    content,
-  };
-}
-
-export function generateMetadata({ params }: { params: { slug: string } }) {
-  const blog = getPost(params);
+export function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}): Metadata {
+  const post = getBlogPost(params);
 
   const urlSearchParams = new URLSearchParams({
-    date: blog.frontMatter.date,
-    title: blog.frontMatter.title,
-    slug: blog.slug,
+    date: post.meta.date,
+    title: post.meta.title,
+    slug: post.slug,
   }).toString();
 
   return {
-    title: blog.frontMatter.title,
-    description: blog.frontMatter.description,
+    title: post.meta.title,
+    description: post.meta.description,
     metadataBase: new URL("https://francisudeji.dev"),
     alternates: {
-      canonical: `/blog/${blog.slug}`,
+      canonical: `/blog/${post.slug}`,
     },
     openGraph: {
-      title: blog.frontMatter.title,
+      title: post.meta.title,
       description: "francisudeji.dev",
       url: "https://francisudeji.dev",
       siteName: "francisudeji.dev",
@@ -78,7 +60,7 @@ export function generateMetadata({ params }: { params: { slug: string } }) {
           url: `/api/og?${urlSearchParams}`,
           width: 1200,
           height: 627,
-          alt: blog.frontMatter.title,
+          alt: post.meta.title,
         },
       ],
       type: "website",
@@ -86,26 +68,25 @@ export function generateMetadata({ params }: { params: { slug: string } }) {
   };
 }
 
-// app/blog/[slug]/page.tsx
-export default async function Post({ params }: any) {
-  const props = getPost(params);
+export default async function Post({ params }: { params: { slug: string } }) {
+  const props = getBlogPost(params);
 
   return (
     <Container variant="medium">
       <article className="prose prose-slate mx-auto prose-img:w-full prose-img:rounded-md my-6 max-w-full prose-base md:prose-lg prose-lead:text-red-300 prose-table:border prose-table:border-slate-200 prose-td:text-center prose-th:text-center prose-th:pt-3 even:prose-tr:bg-slate-100">
         <Link
           href="/blog"
-          className="mt-6 no-underline hover:underline focus:underline"
+          className="flex items-center mt-6 no-underline hover:underline focus:underline"
         >
           ← Back to blog
         </Link>
 
         <div className="space-y-6 mt-16">
-          <span className="text-sm font-light">{props.frontMatter.date}</span>
-          <h1>{props.frontMatter.title}</h1>
+          <span className="text-sm font-light">{props.meta.date}</span>
+          <h1>{props.meta.title}</h1>
           <Image
             src={`/images/${props.slug}/cover.avif`}
-            alt={props.frontMatter.title}
+            alt={props.meta.title}
             width={1024}
             height={1024}
             quality={100}
