@@ -5,7 +5,7 @@ import langNginx from "highlight.js/lib/languages/nginx";
 import "src/styles/highlight.css";
 
 import { MDXRemote } from "next-mdx-remote/rsc";
-import { Container } from "src/components/container";
+import { Container } from "src/components/Container";
 import Link from "next/link";
 import Image from "next/image";
 import { Metadata } from "next";
@@ -101,7 +101,7 @@ export default async function Post({ params }: { params: { slug: string } }) {
           <span className="text-sm font-light">{props.meta.date}</span>
           <h1>{props.meta.title}</h1>
           <Image
-            src={`/images/${props.slug}/cover.avif`}
+            src={`/images/${props.slug}/cover.webp`}
             alt={props.meta.title}
             width={1024}
             height={1024}

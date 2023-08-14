@@ -7,7 +7,6 @@ export default async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     console.log(searchParams.values());
 
-    // dynamic params
     const date = searchParams.get("date") || "";
     const title = searchParams.has("title")
       ? searchParams.get("title")?.slice(0, 100)
