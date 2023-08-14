@@ -9,7 +9,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Metadata } from "next";
 import { getBlogPost, getBlogPostFiles } from "@utils/blog";
-import { Container } from "@components/index";
+import { Container } from "@components/container";
 
 const options = {
   mdxOptions: {

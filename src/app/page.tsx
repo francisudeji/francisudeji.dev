@@ -1,7 +1,8 @@
 import { Inter } from "@next/font/google";
 
 import { Metadata } from "next";
-import { Container, Post } from "@components/index";
+import { Container } from "@components/container";
+import { Post } from "@components/post";
 
 import { getBlogPosts } from "@utils/blog";
 

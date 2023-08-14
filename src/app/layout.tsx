@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Inter } from "@next/font/google";
 
 import "@styles/globals.css";
-import { Container } from "@components/index";
+import { Container } from "@components/container";
 
 const navigation = [
   { name: "blog", path: "/blog" },
