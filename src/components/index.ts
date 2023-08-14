@@ -1,2 +1,2 @@
-export { Container } from "./Container";
-export { Post } from "./Post";
+export { Container } from "./container";
+export { Post } from "./post";
