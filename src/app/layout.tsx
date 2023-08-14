@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { Container } from "src/components/Container";
 import { Inter } from "@next/font/google";
 
-import "src/styles/globals.css";
+import "@styles/globals.css";
+import { Container } from "@components/index";
 
 const navigation = [
   { name: "blog", path: "/blog" },

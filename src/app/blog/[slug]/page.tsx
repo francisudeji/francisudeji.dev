@@ -2,14 +2,14 @@ import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import langHttp from "highlight.js/lib/languages/http";
 import langNginx from "highlight.js/lib/languages/nginx";
-import "src/styles/highlight.css";
+import "@styles/highlight.css";
 
 import { MDXRemote } from "next-mdx-remote/rsc";
-import { Container } from "src/components/Container";
 import Link from "next/link";
 import Image from "next/image";
 import { Metadata } from "next";
-import { getBlogPost, getBlogPostFiles } from "src/utils/blog";
+import { getBlogPost, getBlogPostFiles } from "@utils/blog";
+import { Container } from "@components/index";
 
 const options = {
   mdxOptions: {

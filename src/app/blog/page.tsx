@@ -1,11 +1,9 @@
 import { Inter } from "@next/font/google";
 
 import { Metadata } from "next";
+import { Container, Post } from "@components/index";
 
-import Link from "next/link";
-import { Container } from "src/components/Container";
-import { Post } from "src/components/Post";
-import { getBlogPosts } from "src/utils/blog";
+import { getBlogPosts } from "@utils/blog";
 
 export const metadata: Metadata = {
   title: "Blog | francisudeji.dev",
