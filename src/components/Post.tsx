@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-interface Post {
+interface PostProps {
   meta: {
     [key: string]: any;
   };
@@ -8,7 +8,7 @@ interface Post {
   content: string;
 }
 
-export function Post(post: Post) {
+export function Post(post: PostProps) {
   return (
     <Link
       href={"/blog/" + post.slug}
