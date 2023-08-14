@@ -33,8 +33,8 @@ export default async function GET(request: Request) {
         </div>
       ),
       {
-        width: 1200,
-        height: 627,
+        width: 2400,
+        height: 1256,
       }
     );
   } catch (e) {

@@ -7,9 +7,9 @@ import { Container } from "src/components/container";
 import { getBlogPosts } from "src/utils/blog";
 
 export const metadata: Metadata = {
-  title: "Francis Udeji - Blog",
+  title: "Blog | francisudeji.dev",
   description: "francisudeji.dev",
-  viewport: "width=device-width, initial-scale=1",
+  viewport: "width=device-width, initial-scale=1, viewport-fit=cover",
   icons: "/favicon.ico",
 };
 

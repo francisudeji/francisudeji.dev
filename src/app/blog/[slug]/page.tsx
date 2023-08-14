@@ -50,16 +50,32 @@ export function generateMetadata({
     alternates: {
       canonical: `/blog/${post.slug}`,
     },
+    themeColor: "#0f172a",
+    twitter: {
+      title: post.meta.title,
+      description: "francisudeji.dev",
+      card: "summary_large_image",
+      creator: "@francisudeji",
+      site: "@francisudeji",
+      images: [
+        {
+          url: `/api/og?${urlSearchParams}`,
+          width: 2400,
+          height: 1256,
+          alt: post.meta.title,
+        },
+      ],
+    },
     openGraph: {
       title: post.meta.title,
       description: "francisudeji.dev",
-      url: "https://francisudeji.dev",
+      url: `https://francisudeji.dev/blog/${post.slug}`,
       siteName: "francisudeji.dev",
       images: [
         {
           url: `/api/og?${urlSearchParams}`,
-          width: 1200,
-          height: 627,
+          width: 2400,
+          height: 1256,
           alt: post.meta.title,
         },
       ],
