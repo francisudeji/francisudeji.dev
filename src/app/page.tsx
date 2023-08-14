@@ -1,9 +1,8 @@
 import { Inter } from "@next/font/google";
 
 import { Metadata } from "next";
-import { Container } from "@components/index";
+import { Container, Post } from "@components/index";
 
-import { Post } from "@src/components/post";
 import { getBlogPosts } from "src/utils/blog";
 
 export const metadata: Metadata = {
