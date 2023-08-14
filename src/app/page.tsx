@@ -3,7 +3,7 @@ import { Inter } from "@next/font/google";
 import { Metadata } from "next";
 import { Container, Post } from "@components/index";
 
-import { getBlogPosts } from "src/utils/blog";
+import { getBlogPosts } from "@utils/blog";
 
 export const metadata: Metadata = {
   title: "Francis Udeji",

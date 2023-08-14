@@ -1,2 +1,2 @@
-export { Container } from "@components/container";
-export { Post } from "@components/post";
+export { Container } from "./container";
+export { Post } from "./post";
