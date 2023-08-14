@@ -2,12 +2,9 @@ import { Inter } from "@next/font/google";
 
 import { Metadata } from "next";
 
-import fs from "fs";
-import path from "path";
-import matter from "gray-matter";
-
 import Link from "next/link";
 import { Container } from "src/components/container";
+import { getBlogPosts } from "src/utils/blog";
 
 export const metadata: Metadata = {
   title: "Francis Udeji - Blog",
@@ -19,42 +16,7 @@ export const metadata: Metadata = {
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Blog() {
-  // 1) Set blogs directory
-  const blogDir = "src/posts";
-
-  // 2) Find all files in the blog directory
-  const folders = fs.readdirSync(path.join(blogDir));
-
-  const files = folders.map((folder) => {
-    const files = fs.readdirSync(path.join(`src/posts/${folder}`));
-    return files.find((f) => f.endsWith(".mdx")) as string;
-  });
-
-  // 3) For each blog found
-  const blogs = files
-    .map((filename) => {
-      // 4) Read the content of that blog
-      const fileContent = fs.readFileSync(
-        path.join(`${blogDir}/${filename.split(".")[0]}`, filename),
-        "utf-8"
-      );
-
-      // 5) Extract the metadata from the blog's content
-      const { data: frontMatter } = matter(fileContent);
-
-      // 6) Return the metadata and page slug
-      return {
-        meta: frontMatter,
-        slug: filename.replace(".mdx", ""),
-      };
-    })
-    .sort((a, b) => {
-      if (new Date(a.meta.date) > new Date(b.meta.date)) {
-        return -1;
-      }
-
-      return 1;
-    });
+  const posts = getBlogPosts();
 
   return (
     <main className="flex flex-col mt-16" style={inter.style}>
@@ -67,20 +29,20 @@ export default function Blog() {
           </div>
 
           <div className="my-6 grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 lg:gap-12">
-            {blogs.map((blog) => (
+            {posts.map((post) => (
               <Link
-                href={"/blog/" + blog.slug}
+                href={"/blog/" + post.slug}
                 passHref
-                key={blog.slug}
+                key={post.slug}
                 className="border border-slate-200 rounded-md p-2"
               >
                 <div className="py-2 flex flex-col gap-2">
                   <div>
-                    <h3 className="text-lg font-bold">{blog.meta.title}</h3>
-                    <p className="text-gray-400">{blog.meta.description}</p>
+                    <h3 className="text-lg font-bold">{post.meta.title}</h3>
+                    <p className="text-gray-400">{post.meta.description}</p>
                   </div>
                   <div className="my-auto text-gray-400">
-                    <p>{blog.meta.date}</p>
+                    <p>{post.meta.date}</p>
                   </div>
                 </div>
               </Link>
