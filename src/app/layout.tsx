@@ -3,7 +3,6 @@ import { Container } from "src/components/Container";
 import { Inter } from "@next/font/google";
 
 import "src/styles/globals.css";
-import Image from "next/image";
 
 const navigation = [
   { name: "blog", path: "/blog" },
