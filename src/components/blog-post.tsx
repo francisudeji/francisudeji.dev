@@ -19,7 +19,6 @@ export function Post(post: PostProps) {
       <article className="flex flex-col gap-2">
         <div>
           <h3 className="text-lg font-bold">{post.meta.title}</h3>
-          <p className="">{post.meta.description}</p>
         </div>
         <div className="my-auto">
           <p className="text-slate-400 text-sm">{post.meta.date}</p>
