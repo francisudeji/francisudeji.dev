@@ -68,7 +68,7 @@ export function generateMetadata({
     },
     openGraph: {
       title: post.meta.title,
-      description: "francisudeji.dev",
+      description: post.meta.description,
       url: `https://francisudeji.dev/blog/${post.slug}`,
       siteName: "francisudeji.dev",
       images: [
