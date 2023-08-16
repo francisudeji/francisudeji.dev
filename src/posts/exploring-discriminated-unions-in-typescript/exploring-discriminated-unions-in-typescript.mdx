@@ -6,7 +6,9 @@ cover: "/images/exploring-discriminated-unions-in-typescript/cover.webp"
 canonical: false
 ---
 
-Discriminated unions in TypeScript are a powerful feature that allows developers to model complex data structures with improved type safety and readability. In this guide, we'll dive deep into what discriminated unions are, why they're valuable, and how to leverage them effectively in your TypeScript projects.
+## Introduction
+
+Discriminated unions in TypeScript are an essential feature that provides an elegant way of representing data structures at the type level, code readability, and type safety. In this tutorial, we'll learn about what discriminated unions are and how to use take advantage of them.
 
 ## What are Discriminated Unions?
 
@@ -20,43 +22,154 @@ Discriminated unions, also known as tagged unions or algebraic data types, are a
 
 - **Pattern Matching**: Discriminated unions facilitate pattern matching, enabling you to handle different cases more elegantly and avoiding lengthy chains of if and else statements.
 
-## Creating Discriminated Unions:
+## Creating Discriminated Unions
 
-To create a discriminated union in TypeScript, follow these steps:
+To create a discriminated union in TypeScript, we can follow the following steps:
 
 - Define an interface or type for each variant of the union.
 - Add a shared property, the discriminant, that will differentiate between the variants.
-- Create a type that combines all the individual types using the vertical bar (|) operator.
+- Create a type that combines all the individual types using the vertical bar (`|`) operator.
 
-Here's an example from the typescript official website:
+Here's a slightly modified example from the typescript [official website](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes-func.html#unions):
 
 ```ts
-interface Square {
-  kind: "square";
-  sideLength: number;
-}
-
 interface Circle {
   kind: "circle";
   radius: number;
 }
 
-type Shape = Square | Circle;
+interface Square {
+  kind: "square";
+  x: number;
+}
+
+interface Triangle {
+  kind: "triangle";
+  x: number;
+  y: number;
+}
+
+type Shape = Circle | Square | Triangle;
 ```
 
-## Pattern Matching with Discriminated Unions:
+In this snippet, we can identify the union of three interfaces, `Circle`, `Square`, and `Triangle`, with each having unique properties such as `radius`, `x`, and `y`. And a discriminant property `kind`, which exists on all individual shape interfaces to enable TypeScript to narrow down the types when we access them further down in our implementation.
+
+## Pattern Matching with Discriminated Unions
 
 Pattern matching can be achieved using a switch statement in TypeScript. The discriminant property allows the compiler to infer the specific type within each case block.
 
 ```ts
-function calculateArea(shape: Shape): number {
-  switch (shape.kind) {
-    case "square":
-      return shape.sideLength * shape.sideLength;
-    case "circle":
-      return Math.PI * shape.radius * shape.radius;
+function calculateArea(shape: Shape) {
+  if (shape.kind === "circle") {
+    return Math.PI * shape.radius * shape.radius;
   }
+
+  if (shape.kind === "square") {
+    return shape.x * shape.x;
+  }
+
+  return (shape.x * shape.y) / 2;
 }
 ```
 
-In conclusion, discriminated unions are a valuable tool in TypeScript for handling complex data structures with increased type safety and readability. By leveraging pattern matching and precise type information, developers can write more maintainable and error-resistant code. Integrating these concepts into your projects can significantly enhance your coding experience and the quality of your applications.
+## Using Discriminated Unions in React
+
+You may have seen an implementation of a component that composes at least two other components and renders each one depending on some logic, at least I have.
+
+If you have, you may also have noticed the slew of optional vs mandatory properties defined on the type level --- it may have looked something like this:
+
+```tsx
+interface MenuItemProps {
+  variant: "link" | "button";
+  href?: string;
+  onClick?: () => void;
+  text: string;
+  // ... other props
+}
+
+export function MenuItem({ variant, href, onClick, text }: MenuItemProps) {
+  // ... some bit of logic goes here
+  if (variant === "button") {
+    return <PrimaryButton onClick={onClick}>{text}</PrimaryButton>;
+  }
+
+  return <Link href={href}>{text}</Link>;
+}
+```
+
+And then we can render the component like this:
+
+```tsx
+<MenuItem variant="button" onClick={() => {}} text="Join waitlist" />
+```
+
+Or like this too:
+
+```tsx
+<MenuItem variant="link" href="https://example.com" text="Sign in" />
+```
+
+Now, technically the above implementation works and doesn't produce any errors for the most part but now we've introduced a new ~problem~ _indirection_ with reading this component where it's been rendered.
+
+How so? You may ask.
+
+Well, now nothing is stopping us from doing this:
+
+```tsx
+<MenuItem
+  variant="button"
+  href="https://example.com"
+  text="Sign in"
+  onClick={() => {
+    console.log("clicked");
+  }}
+/>
+```
+
+Again, technically this would still render the button component under the hood and ignore any props not passed down but the point still stands that this indirection has caused us a loose autocomplete and gives a false sense of what's happening because how can a button expect a `href` that only works for links.
+
+Sure, we can fix this by just rendering either a `Link` or `PrimaryButton` component where it's needed but imagine we have a couple of dozen places where we need to do this logic.
+
+We can fix this by using discriminated unions in a central location and sharing `MenuItem` component across:
+
+```tsx
+interface MenuItemButton {
+  variant: "button";
+  onClick: () => void;
+  text: string;
+}
+
+interface MenuItemLink {
+  variant: "link";
+  href: string;
+  text: string;
+}
+
+type MenuItemProps = MenuItemButton | MenuItemLink;
+
+export function MenuItem(props: MenuItemProps) {
+  // ... some bit of logic goes here
+  if (props.variant === "button") {
+    return <PrimaryButton onClick={props.onClick}>{props.text}</PrimaryButton>;
+  }
+
+  return <Link href={props.href}>{props.text}</Link>;
+}
+```
+
+Here's a breakdown of what we did to improve the flexibility of this component:
+
+- First, `MenuItemProps` is now a union of two new interfaces `MenuItemButton` and `MenuItemLink`
+- We created a discriminant `variant` on individual interfaces to enable type narrowing
+
+With this new implementation, we never run into an impossible state when we render `MenuItem` since our editor never even autocompletes for a prop that doesn't exist once we pass a `variant` prop.
+
+## Caveats
+
+One thing you might have noticed in the above example is that we now have to access each prop with dot notation instead of destructuring, for example, `props.variant`, `props.text`, etc.
+
+This is so that TypeScript can better understand what property discriminates between the union and thereby narrow down the properties that exit for that given type.
+
+## Conclusion
+
+Discriminated unions are a useful feature of TypeScript for dealing with complex data structures while maintaining type safety and readability. And in this tutorial, we learned how to use them to produce more maintainable and error-resistant code.
