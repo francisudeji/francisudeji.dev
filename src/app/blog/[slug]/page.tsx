@@ -53,13 +53,13 @@ export function generateMetadata({
     themeColor: "#0f172a",
     twitter: {
       title: post.meta.title,
-      description: "francisudeji.dev",
+      description: post.meta.description,
       card: "summary_large_image",
       creator: "@francisudeji",
       site: "@francisudeji",
       images: [
         {
-          url: `/api/og?${urlSearchParams}`,
+          url: `/images/${post.slug}/cover.webp`,
           width: 2400,
           height: 1256,
           alt: post.meta.title,
@@ -73,7 +73,7 @@ export function generateMetadata({
       siteName: "francisudeji.dev",
       images: [
         {
-          url: `/api/og?${urlSearchParams}`,
+          url: `/images/${post.slug}/cover.webp`,
           width: 2400,
           height: 1256,
           alt: post.meta.title,
