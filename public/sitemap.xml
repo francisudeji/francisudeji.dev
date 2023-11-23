@@ -1,0 +1,25 @@
+<xml version="1.0" encoding="UTF-8">
+  <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+      <loc>https://francisudeji.dev</loc>
+    </url>
+    <url>
+      <loc>https://wordcombo.francisudeji.dev</loc>
+    </url>
+    <url>
+      <loc>https://francisudeji.dev/blog</loc>
+    </url>
+    <url>
+      <loc>https://francisudeji.dev/blog/exploring-discriminated-unions-in-typescript</loc>
+      <lastmod>2023-07-17</lastmod>
+    </url>
+    <url>
+      <loc>https://francisudeji.dev/blog/building-authentication-api-nextauth-js</loc>
+      <lastmod>2021-07-16</lastmod>
+    </url>
+    <url>
+      <loc>https://francisudeji.dev/blog/introduction-to-data-fetching-with-next-js-and-strapi-cms</loc>
+      <lastmod>2020-07-12</lastmod>
+    </url>
+  </urlset>
+</xml>
